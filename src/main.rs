@@ -1,4 +1,6 @@
+use std::env;
 use std::iter;
+use std::str::FromStr;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
@@ -8,9 +10,17 @@ enum State {
 }
 
 fn main() -> Result<(), ()> {
-    let pomo_length = 25;
-    let rest_length = 5;
-    let pomo_num = 4;
+    let pomo_length = env::args()
+        .nth(1)
+        .map_or(25, |n| u64::from_str(&n).unwrap_or(25));
+
+    let rest_length = env::args()
+        .nth(2)
+        .map_or(5, |n| u64::from_str(&n).unwrap_or(5));
+
+    let pomo_num = env::args()
+        .nth(3)
+        .map_or(4, |n| u64::from_str(&n).unwrap_or(4));
 
     let clear_space: String = iter::repeat(" ")
         .take(pomo_length.to_string().len())
@@ -33,7 +43,7 @@ fn main() -> Result<(), ()> {
 
 fn run_timer(len: u64, clr: &String, dur: Duration, state: State) -> Result<(), ()> {
     let start = Instant::now();
-    for _ in 0..=len {
+    for _ in 0..len {
         let state_str: String = match state {
             State::Pomo(t) => t.to_string(),
             State::Rest => "r".into(),
@@ -56,11 +66,11 @@ fn run_timer(len: u64, clr: &String, dur: Duration, state: State) -> Result<(), 
 #[test]
 fn test_run_timer_rest() {
     let result = run_timer(10u64, &"  ".into(), Duration::new(0, 1), State::Rest);
-    assert!(result.is_ok()) ;
+    assert!(result.is_ok());
 }
 
 #[test]
 fn test_run_timer_pomo() {
     let result = run_timer(10u64, &"  ".into(), Duration::new(0, 1), State::Pomo(0));
-    assert!(result.is_ok()) ;
+    assert!(result.is_ok());
 }
