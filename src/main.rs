@@ -63,6 +63,35 @@ fn run_timer(len: u64, clr: &String, dur: Duration, state: State) -> Result<(), 
     Ok(())
 }
 
+macro_rules! run_timer_tests {
+    ($($name:ident: $value:expr,)*) => {
+    $(
+        #[test]
+        fn $name() {
+            let (len, pomo) = $value;
+            let result_rest = run_timer(len, &"  ".into(), Duration::new(0, 1), State::Rest);
+            assert!(result_rest.is_ok());
+
+            let result_pomo = run_timer(len, &"  ".into(), Duration::new(0, 1), State::Pomo(pomo));
+            assert!(result_pomo.is_ok());
+        }
+    )*
+    }
+}
+
+run_timer_tests! {
+    run_timer_test_0: (0, 0),
+    run_timer_test_1: (1, 1),
+    run_timer_test_2: (2, 2),
+    run_timer_test_3: (3, 3),
+    run_timer_test_4: (4, 4),
+    run_timer_test_5: (5, 5),
+    run_timer_test_10: (10, 10),
+    run_timer_test_25: (25, 25),
+    run_timer_test_50: (50, 50),
+    run_timer_test_100: (100, 100),
+}
+
 #[test]
 fn test_run_timer_rest() {
     let result = run_timer(10u64, &"  ".into(), Duration::new(0, 1), State::Rest);
