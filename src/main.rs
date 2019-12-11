@@ -91,15 +91,3 @@ run_timer_tests! {
     run_timer_test_50: (50, 50),
     run_timer_test_100: (100, 100),
 }
-
-#[test]
-fn test_run_timer_rest() {
-    let result = run_timer(10u64, &"  ".into(), Duration::new(0, 1), State::Rest);
-    assert!(result.is_ok());
-}
-
-#[test]
-fn test_run_timer_pomo() {
-    let result = run_timer(10u64, &"  ".into(), Duration::new(0, 1), State::Pomo(0));
-    assert!(result.is_ok());
-}
