@@ -29,6 +29,8 @@ fn main() -> Result<(), ()> {
 
     let incr_duration = Duration::new(60, 0);
 
+    println!("");
+
     for pnum in 0..pomo_num {
         // Work time
         run_timer(pomo_length, &clear_space, incr_duration, State::Pomo(pnum))?;
