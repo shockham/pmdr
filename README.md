@@ -1,4 +1,4 @@
-# PMDR
+# pmdr
 
 Minimal pomodoro timer with no deps.
 
