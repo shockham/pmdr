@@ -4,30 +4,35 @@ use std::str::FromStr;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
+const POMO_LEN_DEFAULT: u64 = 25;
+const REST_LEN_DEFAULT: u64 = 5;
+const POMO_NUM_DEFAULT: u64 = 4;
+const INCR_DURATION: u64 = 60;
+
 enum State {
     Pomo(u64),
     Rest,
 }
 
 fn main() -> Result<(), ()> {
-    let pomo_length = env::args()
-        .nth(1)
-        .map_or(25, |n| u64::from_str(&n).unwrap_or(25));
+    let pomo_length = env::args().nth(1).map_or(POMO_LEN_DEFAULT, |n| {
+        u64::from_str(&n).unwrap_or(POMO_LEN_DEFAULT)
+    });
 
-    let rest_length = env::args()
-        .nth(2)
-        .map_or(5, |n| u64::from_str(&n).unwrap_or(5));
+    let rest_length = env::args().nth(2).map_or(REST_LEN_DEFAULT, |n| {
+        u64::from_str(&n).unwrap_or(REST_LEN_DEFAULT)
+    });
 
-    let pomo_num = env::args()
-        .nth(3)
-        .map_or(4, |n| u64::from_str(&n).unwrap_or(4));
+    let pomo_num = env::args().nth(3).map_or(POMO_NUM_DEFAULT, |n| {
+        u64::from_str(&n).unwrap_or(POMO_NUM_DEFAULT)
+    });
 
     let clear_space: String = iter::repeat(" ")
         .take(pomo_length.to_string().len())
         .flat_map(|s| s.chars())
         .collect();
 
-    let incr_duration = Duration::new(60, 0);
+    let incr_duration = Duration::new(INCR_DURATION, 0);
 
     println!("");
 
@@ -54,7 +59,7 @@ fn run_timer(len: u64, clr: &String, dur: Duration, state: State) -> Result<(), 
         eprint!(
             "\r{}:{}/{}{}",
             state_str,
-            len - start.elapsed().as_secs(),
+            len - (start.elapsed().as_secs() / INCR_DURATION),
             len,
             clr
         );
